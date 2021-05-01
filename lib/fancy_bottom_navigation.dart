@@ -66,10 +66,8 @@ class FancyBottomNavigationState extends State<FancyBottomNavigation>
 
     activeIcon = widget.tabs[currentSelected].iconData;
 
-    currentCircleColor = currentCircleColor ??
-        ((Theme.of(context).brightness == Brightness.dark)
-            ? Colors.white
-            : Theme.of(context).primaryColor);
+    circleColor = widget.circleColor ??
+        [Colors.white, Colors.white, Colors.white, Colors.white];
 
     activeIconColor = widget.activeIconColor ??
         ((Theme.of(context).brightness == Brightness.dark)
