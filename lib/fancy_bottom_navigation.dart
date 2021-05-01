@@ -52,7 +52,6 @@ class FancyBottomNavigationState extends State<FancyBottomNavigation>
   int currentSelected = 0;
   double _circleAlignX = 0;
   double _circleIconAlpha = 1;
-  Color currentCircleColor = Colors.transparent;
 
   late List<Color> circleColor;
   late Color activeIconColor;
@@ -97,7 +96,6 @@ class FancyBottomNavigationState extends State<FancyBottomNavigation>
     ARC_HEIGHT = ARC_HEIGHT * widget.ratio;
     ARC_WIDTH = ARC_WIDTH * widget.ratio;
     CIRCLE_OUTLINE = CIRCLE_OUTLINE * widget.ratio;
-    currentCircleColor = circleColor[widget.initialSelection];
     _setSelected(widget.tabs[widget.initialSelection].key);
   }
 
@@ -107,7 +105,6 @@ class FancyBottomNavigationState extends State<FancyBottomNavigation>
     if (mounted) {
       setState(() {
         currentSelected = selected;
-        currentCircleColor = circleColor[selected];
         _circleAlignX = -1 + (2 / (widget.tabs.length - 1) * selected);
         nextIcon = widget.tabs[selected].iconData;
       });
@@ -199,7 +196,7 @@ class FancyBottomNavigationState extends State<FancyBottomNavigation>
                           child: Container(
                             decoration: BoxDecoration(
                                 shape: BoxShape.circle,
-                                color: currentCircleColor),
+                                color: circleColor[currentSelected]),
                             child: Padding(
                               padding: const EdgeInsets.all(0.0),
                               child: AnimatedOpacity(
