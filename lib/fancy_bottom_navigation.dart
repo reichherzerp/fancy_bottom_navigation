@@ -5,12 +5,12 @@ import 'package:fancy_bottom_navigation/paint/half_clipper.dart';
 import 'package:fancy_bottom_navigation/paint/half_painter.dart';
 import 'package:flutter/material.dart';
 
-const double CIRCLE_SIZE = 60;
-const double ARC_HEIGHT = 70;
-const double ARC_WIDTH = 90;
-const double CIRCLE_OUTLINE = 10;
-const double SHADOW_ALLOWANCE = 20;
-const double BAR_HEIGHT = 60;
+double CIRCLE_SIZE = 60;
+double ARC_HEIGHT = 70;
+double ARC_WIDTH = 90;
+double CIRCLE_OUTLINE = 10;
+double SHADOW_ALLOWANCE = 20;
+double BAR_HEIGHT = 60;
 
 class FancyBottomNavigation extends StatefulWidget {
   FancyBottomNavigation(
@@ -22,7 +22,8 @@ class FancyBottomNavigation extends StatefulWidget {
       this.activeIconColor,
       this.inactiveIconColor,
       this.textColor,
-      this.barBackgroundColor})
+      this.barBackgroundColor,
+      this.ratio = 1.0})
       : assert(onTabChangedListener != null),
         assert(tabs != null),
         assert(tabs.length > 1 && tabs.length < 5);
@@ -35,6 +36,7 @@ class FancyBottomNavigation extends StatefulWidget {
   final Color? barBackgroundColor;
   final List<TabData> tabs;
   final int initialSelection;
+  final double ratio;
 
   final Key? key;
 
@@ -90,6 +92,12 @@ class FancyBottomNavigationState extends State<FancyBottomNavigation>
   @override
   void initState() {
     super.initState();
+    BAR_HEIGHT = BAR_HEIGHT * widget.ratio;
+    SHADOW_ALLOWANCE = SHADOW_ALLOWANCE * widget.ratio;
+    CIRCLE_SIZE = CIRCLE_SIZE * widget.ratio;
+    ARC_HEIGHT = ARC_HEIGHT * widget.ratio;
+    ARC_WIDTH = ARC_WIDTH * widget.ratio;
+    CIRCLE_OUTLINE = CIRCLE_OUTLINE * widget.ratio;
     _setSelected(widget.tabs[widget.initialSelection].key);
   }
 
@@ -112,7 +120,7 @@ class FancyBottomNavigationState extends State<FancyBottomNavigation>
       alignment: Alignment.bottomCenter,
       children: <Widget>[
         Container(
-          height: BAR_HEIGHT,
+          height: BAR_HEIGHT * widget.ratio,
           decoration: BoxDecoration(color: barBackgroundColor, boxShadow: [
             BoxShadow(
                 color: Colors.black12, offset: Offset(0, -1), blurRadius: 8)
