@@ -29,7 +29,7 @@ class FancyBottomNavigation extends StatefulWidget {
         assert(tabs.length > 1 && tabs.length < 5);
 
   final Function(int position) onTabChangedListener;
-  final Color? circleColor;
+  final List<Color>? circleColor;
   final Color? activeIconColor;
   final Color? inactiveIconColor;
   final Color? textColor;
@@ -52,8 +52,9 @@ class FancyBottomNavigationState extends State<FancyBottomNavigation>
   int currentSelected = 0;
   double _circleAlignX = 0;
   double _circleIconAlpha = 1;
+  Color currentCircleColor = Colors.transparent;
 
-  late Color circleColor;
+  late List<Color> circleColor;
   late Color activeIconColor;
   late Color inactiveIconColor;
   late Color barBackgroundColor;
@@ -65,7 +66,7 @@ class FancyBottomNavigationState extends State<FancyBottomNavigation>
 
     activeIcon = widget.tabs[currentSelected].iconData;
 
-    circleColor = widget.circleColor ??
+    currentCircleColor = currentCircleColor ??
         ((Theme.of(context).brightness == Brightness.dark)
             ? Colors.white
             : Theme.of(context).primaryColor);
@@ -98,6 +99,7 @@ class FancyBottomNavigationState extends State<FancyBottomNavigation>
     ARC_HEIGHT = ARC_HEIGHT * widget.ratio;
     ARC_WIDTH = ARC_WIDTH * widget.ratio;
     CIRCLE_OUTLINE = CIRCLE_OUTLINE * widget.ratio;
+    currentCircleColor = circleColor[widget.initialSelection];
     _setSelected(widget.tabs[widget.initialSelection].key);
   }
 
@@ -107,6 +109,7 @@ class FancyBottomNavigationState extends State<FancyBottomNavigation>
     if (mounted) {
       setState(() {
         currentSelected = selected;
+        currentCircleColor = circleColor[selected];
         _circleAlignX = -1 + (2 / (widget.tabs.length - 1) * selected);
         nextIcon = widget.tabs[selected].iconData;
       });
@@ -197,7 +200,8 @@ class FancyBottomNavigationState extends State<FancyBottomNavigation>
                           width: CIRCLE_SIZE,
                           child: Container(
                             decoration: BoxDecoration(
-                                shape: BoxShape.circle, color: circleColor),
+                                shape: BoxShape.circle,
+                                color: currentCircleColor),
                             child: Padding(
                               padding: const EdgeInsets.all(0.0),
                               child: AnimatedOpacity(
