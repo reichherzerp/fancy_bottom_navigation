@@ -18,7 +18,7 @@ class FancyBottomNavigation extends StatefulWidget {
       required this.onTabChangedListener,
       this.key,
       this.initialSelection = 0,
-      this.circleColor,
+      required this.circleColor,
       this.activeIconColor,
       this.inactiveIconColor,
       this.textColor,
@@ -28,7 +28,7 @@ class FancyBottomNavigation extends StatefulWidget {
         assert(tabs.length > 1 && tabs.length < 5);
 
   final Function(int position) onTabChangedListener;
-  final Color? circleColor;
+  final List<Color> circleColor;
   final Color? activeIconColor;
   final Color? inactiveIconColor;
   final Color? textColor;
@@ -51,7 +51,8 @@ class FancyBottomNavigationState extends State<FancyBottomNavigation>
   double _circleAlignX = 0;
   double _circleIconAlpha = 1;
 
-  late Color circleColor;
+  late List<Color> circleColor;
+  late Color currentCircleColor;
   late Color activeIconColor;
   late Color inactiveIconColor;
   late Color barBackgroundColor;
@@ -63,10 +64,7 @@ class FancyBottomNavigationState extends State<FancyBottomNavigation>
 
     activeIcon = widget.tabs[currentSelected].iconData;
 
-    circleColor = widget.circleColor ??
-        ((Theme.of(context).brightness == Brightness.dark)
-            ? Colors.white
-            : Theme.of(context).primaryColor);
+    circleColor = widget.circleColor;
 
     activeIconColor = widget.activeIconColor ??
         ((Theme.of(context).brightness == Brightness.dark)
@@ -90,6 +88,7 @@ class FancyBottomNavigationState extends State<FancyBottomNavigation>
   @override
   void initState() {
     super.initState();
+    circleColor = widget.circleColor;
     _setSelected(widget.tabs[widget.initialSelection].key);
   }
 
@@ -101,6 +100,7 @@ class FancyBottomNavigationState extends State<FancyBottomNavigation>
         currentSelected = selected;
         _circleAlignX = -1 + (2 / (widget.tabs.length - 1) * selected);
         nextIcon = widget.tabs[selected].iconData;
+        currentCircleColor = circleColor[currentSelected];
       });
     }
   }
@@ -108,7 +108,7 @@ class FancyBottomNavigationState extends State<FancyBottomNavigation>
   @override
   Widget build(BuildContext context) {
     return Stack(
-      overflow: Overflow.visible,
+      clipBehavior: Clip.none,
       alignment: Alignment.bottomCenter,
       children: <Widget>[
         Container(
@@ -189,7 +189,7 @@ class FancyBottomNavigationState extends State<FancyBottomNavigation>
                           width: CIRCLE_SIZE,
                           child: Container(
                             decoration: BoxDecoration(
-                                shape: BoxShape.circle, color: circleColor),
+                                shape: BoxShape.circle, color: currentCircleColor),
                             child: Padding(
                               padding: const EdgeInsets.all(0.0),
                               child: AnimatedOpacity(
@@ -251,3 +251,4 @@ class TabData {
   Function? onclick;
   final UniqueKey key = UniqueKey();
 }
+
